@@ -17,9 +17,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var password: UITextField!
     
     @IBAction func signUp(sender: AnyObject) {
-    
+        if firstName.text == "" || lastName.text == "" || phoneNumber.text == "" || emailId.text == "" || password.text == "" {
+            var alert =  UIAlertController(title: "Error in form.", message: "Please enter all the details.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
