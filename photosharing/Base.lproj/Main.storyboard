@@ -91,6 +91,17 @@
                                     <action selector="signUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="huK-YF-6C4"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qcZ-09-ll8">
+                                <rect key="frame" x="164" y="314" width="46" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="70" id="9t4-dA-jP4"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Login"/>
+                                <connections>
+                                    <action selector="login:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QRx-Ff-OhF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -100,7 +111,9 @@
                             <constraint firstItem="Zb4-3h-Hem" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9UJ-q2-oY8"/>
                             <constraint firstItem="VWx-Mq-LlT" firstAttribute="top" secondItem="8Nm-2i-jDP" secondAttribute="bottom" constant="15" id="KFb-0c-hAr"/>
                             <constraint firstItem="uf7-5h-zuU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LSG-KH-FYw"/>
+                            <constraint firstItem="qcZ-09-ll8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VbI-BF-k7v"/>
                             <constraint firstItem="EGU-Ou-dyS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bBW-Hd-ame"/>
+                            <constraint firstItem="qcZ-09-ll8" firstAttribute="top" secondItem="aks-WY-ci2" secondAttribute="bottom" constant="8" id="bk1-He-zw6"/>
                             <constraint firstItem="uf7-5h-zuU" firstAttribute="top" secondItem="EGU-Ou-dyS" secondAttribute="bottom" constant="8" id="eBA-aZ-qoL"/>
                             <constraint firstItem="Zb4-3h-Hem" firstAttribute="top" secondItem="VWx-Mq-LlT" secondAttribute="bottom" constant="8" id="gT3-CU-Avb"/>
                             <constraint firstItem="8Nm-2i-jDP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="hde-fK-cff"/>
@@ -115,8 +128,10 @@
                         <outlet property="emailId" destination="EGU-Ou-dyS" id="bl5-PF-DMl"/>
                         <outlet property="firstName" destination="VWx-Mq-LlT" id="ANd-gZ-4Ax"/>
                         <outlet property="lastName" destination="Zb4-3h-Hem" id="YUw-Pm-jEF"/>
+                        <outlet property="loginButton" destination="qcZ-09-ll8" id="Mci-Do-BfJ"/>
                         <outlet property="password" destination="uf7-5h-zuU" id="hu4-6U-1aR"/>
                         <outlet property="phoneNumber" destination="0m9-7r-4Dh" id="iZ7-N5-let"/>
+                        <outlet property="signupButton" destination="aks-WY-ci2" id="JNP-4Y-YFA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

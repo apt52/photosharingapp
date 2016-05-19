@@ -12,11 +12,28 @@ import Parse
 
 class ViewController: UIViewController {
 
+    var signupActive = true
     @IBOutlet weak var phoneNumber: UITextField!
     @IBOutlet weak var lastName: UITextField!
     @IBOutlet weak var firstName: UITextField!
     @IBOutlet weak var emailId: UITextField!
     @IBOutlet weak var password: UITextField!
+    
+    @IBOutlet weak var signupButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
+    
+    @IBAction func login(sender: AnyObject) {
+        if signupActive == true {
+            signupButton.setTitle("Login", forState: UIControlState.Normal)
+            loginButton.setTitle("Sign up", forState: UIControlState.Normal)
+            signupActive = false
+        } else {
+            signupButton.setTitle("Sign up", forState: UIControlState.Normal)
+            loginButton.setTitle("Login", forState: UIControlState.Normal)
+            signupActive = true
+        }
+    
+    }
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
@@ -49,24 +66,24 @@ class ViewController: UIViewController {
             var user = PFUser()
             var errorMessage = "Please try again later."
             
-            user.username = firstName.text
-            user.email = emailId.text
-            user.password = password.text
+            user["username"] = firstName.text
+            user["email"] = emailId.text
+            user["password"] = password.text
             user["firstName"] = firstName.text
             user["lastName"] = lastName.text
             user["phoneNumber"] = phoneNumber.text
             
             user.signUpInBackgroundWithBlock({ (success, error) in
+                
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                
                 if error == nil {
-                    self.activityIndicator.stopAnimating()
-                    UIApplication.sharedApplication().endIgnoringInteractionEvents()
                     self.displayAlert("Success!", message: "User signed up successfully!")
                 } else {
                     if let errorString = error?.userInfo["error"] as? String {
                         errorMessage = errorString
                     }
-                    self.activityIndicator.stopAnimating()
-                    UIApplication.sharedApplication().endIgnoringInteractionEvents()
                     self.displayAlert("Signup error", message: errorMessage)
                 }
             })
