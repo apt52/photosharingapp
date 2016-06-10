@@ -7,35 +7,88 @@
 //
 
 import UIKit
-
-import Parse
+import FirebaseAuth
 
 class ViewController: UIViewController {
 
     var signupActive = true
-    @IBOutlet weak var phoneNumber: UITextField!
-    @IBOutlet weak var lastName: UITextField!
-    @IBOutlet weak var firstName: UITextField!
-    @IBOutlet weak var emailId: UITextField!
-    @IBOutlet weak var password: UITextField!
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+ 
+    @IBOutlet weak var emailField: UITextField!
+    @IBOutlet weak var passwordField: UITextField!
     
-    @IBOutlet weak var signupButton: UIButton!
-    @IBOutlet weak var loginButton: UIButton!
-    
-    @IBAction func login(sender: AnyObject) {
-        if signupActive == true {
-            signupButton.setTitle("Login", forState: UIControlState.Normal)
-            loginButton.setTitle("Sign up", forState: UIControlState.Normal)
-            signupActive = false
-        } else {
-            signupButton.setTitle("Sign up", forState: UIControlState.Normal)
-            loginButton.setTitle("Login", forState: UIControlState.Normal)
-            signupActive = true
+    override func viewDidAppear(animated: Bool) {
+        if let user = FIRAuth.auth()?.currentUser {
+            self.signedIn(user)
         }
-    
     }
     
-    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    @IBAction func loginUser(sender: AnyObject) {
+        if emailField.text == "" || passwordField.text == "" {
+            self.displayAlert("Error in form.", message: "Please enter all the details.")
+        } else {
+            // Sign In with credentials.
+            let email = emailField.text
+            let password = passwordField.text
+            self.startLoadingIndicator()
+            
+            FIRAuth.auth()?.signInWithEmail(email!, password: password!) { (user, error) in
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                if let error = error {
+                    self.displayAlert("Signin error!",message: error.localizedDescription)
+                    return
+                }
+                print(user)
+                self.signedIn(user!)
+            }
+        }
+    }
+    
+    @IBAction func signUpUser(sender: AnyObject) {
+        if emailField.text == "" || passwordField.text == "" {
+            self.displayAlert("Error in form.", message: "Please enter all the details.")
+        } else {
+            // start loading indicator and signup user
+            let email = emailField.text
+            let password = passwordField.text
+            self.startLoadingIndicator()
+            FIRAuth.auth()?.createUserWithEmail(email!, password: password!) { (user, error) in
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+
+                if let error = error {
+                    self.displayAlert("Signup error!", message: error.localizedDescription)
+                    return
+                }
+                self.setDisplayName(user!)
+            }
+
+        }
+    }
+    
+    func setDisplayName(user: FIRUser) {
+        let changeRequest = user.profileChangeRequest()
+        changeRequest.displayName = user.email!.componentsSeparatedByString("@")[0]
+        changeRequest.commitChangesWithCompletion(){ (error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            self.signedIn(FIRAuth.auth()?.currentUser)
+        }
+    }
+    
+    
+    func signedIn(user: FIRUser?) {
+        MeasurementHelper.sendLoginEvent()
+        
+        AppState.sharedInstance.displayName = user?.displayName ?? user?.email
+        AppState.sharedInstance.photoUrl = user?.photoURL
+        AppState.sharedInstance.signedIn = true
+        NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
+        //performSegueWithIdentifier(Constants.Segues.SignInToFp, sender: nil)
+    }
     
     func displayAlert(title: String, message: String) {
         
@@ -48,47 +101,50 @@ class ViewController: UIViewController {
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    @IBAction func signUp(sender: AnyObject) {
-        
-        if firstName.text == "" || lastName.text == "" || phoneNumber.text == "" || emailId.text == "" || password.text == "" {
-        
-            self.displayAlert("Error in form.", message: "Please enter all the details.")
-        
-        } else {
-            activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-            activityIndicator.center = self.view.center
-            activityIndicator.hidesWhenStopped = true
-            activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-            view.addSubview(activityIndicator)
-            activityIndicator.startAnimating()
-            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
-            
-            var user = PFUser()
-            var errorMessage = "Please try again later."
-            
-            user["username"] = firstName.text
-            user["email"] = emailId.text
-            user["password"] = password.text
-            user["firstName"] = firstName.text
-            user["lastName"] = lastName.text
-            user["phoneNumber"] = phoneNumber.text
-            
-            user.signUpInBackgroundWithBlock({ (success, error) in
-                
-                self.activityIndicator.stopAnimating()
-                UIApplication.sharedApplication().endIgnoringInteractionEvents()
-                
-                if error == nil {
-                    self.displayAlert("Success!", message: "User signed up successfully!")
-                } else {
-                    if let errorString = error?.userInfo["error"] as? String {
-                        errorMessage = errorString
-                    }
-                    self.displayAlert("Signup error", message: errorMessage)
-                }
-            })
-        }
+    func startLoadingIndicator() {
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
     }
+    
+    
+    
+//    @IBAction func signUp(sender: AnyObject) {
+//        
+//        if emailId.text == "" || password.text == "" {
+//        
+//            self.displayAlert("Error in form.", message: "Please enter all the details.")
+//        
+//        } else {
+//            activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+//            activityIndicator.center = self.view.center
+//            activityIndicator.hidesWhenStopped = true
+//            activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+//            view.addSubview(activityIndicator)
+//            activityIndicator.startAnimating()
+//            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+    
+//            //var errorMessage = "Please try again later."
+//            //var user = PFUser()
+//            FIRAuth.auth()?.createUserWithEmail(emailId.text!, password: password.text!) { (user, error) in
+//                self.activityIndicator.stopAnimating()
+//                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+//                
+//                if let error = error {
+//                    print(error)
+//                    return
+//                }
+//                
+//                print(user)
+//            }
+//        }
+//
+//    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

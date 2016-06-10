@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Parse
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,14 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
-        let configuration = ParseClientConfiguration {
-            $0.applicationId = "rd-instagram-hnmsetxzzn2dunf9"
-            $0.clientKey = "rVS6NV4Ue7m8bKPnAugHmE"
-            $0.server = "https://rd-instagram.herokuapp.com/parse"
-        }
-        
-        Parse.initializeWithConfiguration(configuration)
+        FIRApp.configure()
         // Override point for customization after application launch.
         return true
     }
