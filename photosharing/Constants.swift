@@ -13,8 +13,8 @@ struct Constants {
     }
     
     struct Segues {
-        static let SignInToFp = "SignInToFP"
-        static let FpToSignIn = "FPToSignIn"
+        static let PSView = "PSView"
+        static let PSSignIn = "PSSignIn"
     }
     
 //    struct MessageFields {

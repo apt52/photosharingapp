@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--SignInViewController-->
+        <!--ViewController-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="SignInViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="photosharing" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="photosharing" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -104,11 +104,66 @@
                     <connections>
                         <outlet property="emailField" destination="EGU-Ou-dyS" id="m26-SV-zxu"/>
                         <outlet property="passwordField" destination="uf7-5h-zuU" id="3cl-Lx-c2x"/>
+                        <segue destination="jai-Ho-42X" kind="show" identifier="PSView" id="oaW-Rm-Qbe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="277.5" y="241.5"/>
+            <point key="canvasLocation" x="-594.5" y="113.5"/>
+        </scene>
+        <!--PhotoBox-->
+        <scene sceneID="4p4-Kr-TGY">
+            <objects>
+                <tableViewController id="7Ic-01-a83" customClass="PSViewController" customModule="photosharing" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xeb-Tj-qZb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="xLs-QY-kTg">
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xLs-QY-kTg" id="63q-RG-Y0b">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="7Ic-01-a83" id="LpW-Jf-t9Q"/>
+                            <outlet property="delegate" destination="7Ic-01-a83" id="1aB-v5-Rgu"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="PhotoBox" id="4SB-RJ-767">
+                        <barButtonItem key="leftBarButtonItem" title="Sign out" id="Fa4-YF-cRj">
+                            <connections>
+                                <action selector="signOut:" destination="7Ic-01-a83" id="Tad-2s-Aai"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="+" id="bLi-8q-TeN"/>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f7j-qd-evz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="864" y="133"/>
+        </scene>
+        <!--Login/Signup-->
+        <scene sceneID="Djw-fG-xV5">
+            <objects>
+                <navigationController title="Login/Signup" id="jai-Ho-42X" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VrG-GW-UYR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="7Ic-01-a83" kind="relationship" relationship="rootViewController" id="MxH-Mz-DLz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HhU-7D-DDV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="44" y="133"/>
         </scene>
     </scenes>
 </document>

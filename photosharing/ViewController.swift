@@ -10,8 +10,7 @@ import UIKit
 import FirebaseAuth
 
 class ViewController: UIViewController {
-
-    var signupActive = true
+    
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
  
     @IBOutlet weak var emailField: UITextField!
@@ -35,11 +34,11 @@ class ViewController: UIViewController {
             FIRAuth.auth()?.signInWithEmail(email!, password: password!) { (user, error) in
                 self.activityIndicator.stopAnimating()
                 UIApplication.sharedApplication().endIgnoringInteractionEvents()
+               
                 if let error = error {
                     self.displayAlert("Signin error!",message: error.localizedDescription)
                     return
                 }
-                print(user)
                 self.signedIn(user!)
             }
         }
@@ -56,7 +55,6 @@ class ViewController: UIViewController {
             FIRAuth.auth()?.createUserWithEmail(email!, password: password!) { (user, error) in
                 self.activityIndicator.stopAnimating()
                 UIApplication.sharedApplication().endIgnoringInteractionEvents()
-
                 if let error = error {
                     self.displayAlert("Signup error!", message: error.localizedDescription)
                     return
@@ -87,7 +85,7 @@ class ViewController: UIViewController {
         AppState.sharedInstance.photoUrl = user?.photoURL
         AppState.sharedInstance.signedIn = true
         NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
-        //performSegueWithIdentifier(Constants.Segues.SignInToFp, sender: nil)
+        performSegueWithIdentifier(Constants.Segues.PSView, sender: nil)
     }
     
     func displayAlert(title: String, message: String) {
@@ -111,51 +109,16 @@ class ViewController: UIViewController {
         UIApplication.sharedApplication().beginIgnoringInteractionEvents()
     }
     
-    
-    
-//    @IBAction func signUp(sender: AnyObject) {
-//        
-//        if emailId.text == "" || password.text == "" {
-//        
-//            self.displayAlert("Error in form.", message: "Please enter all the details.")
-//        
-//        } else {
-//            activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-//            activityIndicator.center = self.view.center
-//            activityIndicator.hidesWhenStopped = true
-//            activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-//            view.addSubview(activityIndicator)
-//            activityIndicator.startAnimating()
-//            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
-    
-//            //var errorMessage = "Please try again later."
-//            //var user = PFUser()
-//            FIRAuth.auth()?.createUserWithEmail(emailId.text!, password: password.text!) { (user, error) in
-//                self.activityIndicator.stopAnimating()
-//                UIApplication.sharedApplication().endIgnoringInteractionEvents()
-//                
-//                if let error = error {
-//                    print(error)
-//                    return
-//                }
-//                
-//                print(user)
-//            }
-//        }
-//
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        // Do any additional setup after loading the view, typically from a nib.
 //    }
-
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-    
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+//    
+//
+//    override func didReceiveMemoryWarning() {
+//        super.didReceiveMemoryWarning()
+//        // Dispose of any resources that can be recreated.
+//    }
 
 
 }
